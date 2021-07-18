@@ -67,5 +67,49 @@ namespace Algorithm {
                 digits.insert(digits.begin(),1);
             return digits;
         }
+        
+        // https://leetcode-cn.com/problems/merge-sorted-array/
+//        void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+//            int h1 = 0, h2 = 0;
+//            int sorted[m+n];
+//            int cur;
+//            while (h1 < m || h2 < n) {
+//                if (h1 == m) {
+//                    cur = nums2[h2];
+//                    h2 ++;
+//                } else if (h2 == n) {
+//                    cur = nums1[h1];
+//                    h1 ++;
+//                } else if (nums1[h1] < nums2[h2]) {
+//                    cur = nums1[h1];
+//                    h1 ++;
+//                } else {
+//                    cur = nums2[h2];
+//                    h2 ++;
+//                }
+//                sorted[h1 + h2 - 1] = cur;
+//            }
+//            for (int i = 0; i != m + n; ++ i) {
+//                nums1[i] = sorted[i];
+//            }
+//        }
+        
+        void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+            int p1 = m - 1, p2 = n - 1;
+            int tail = m + n - 1;
+            int tmp;
+            while (p1 >= 0 || p2 >= 0) {
+                if (p1 == -1) {
+                    tmp = nums2[p2--];
+                } else if (p2 == -1) {
+                    tmp = nums1[p1--];
+                } else if (nums1[p1] > nums2[p2]) {
+                    tmp = nums1[p1--];
+                } else {
+                    tmp = nums2[p2--];
+                }
+                nums1[tail--] = tmp;
+            }
+        }
     };
 }
