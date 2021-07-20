@@ -33,7 +33,19 @@ int main(int argc, const char * argv[]) {
 //    int income = solution.maxProfit2(prices);
 //    std::cout << income << "\n";
     
-    int rs = solution.countPrimes(10);
-    std::cout << rs << "\n";
+//    int rs = solution.countPrimes(10);
+//    std::cout << rs << "\n";
+//    vector<int> nums = {2147483647,2147483647};
+//    bool rs = solution.containsNearbyDuplicate(nums, 0);
+//    vector<string> rs = solution.summaryRanges(nums);
+//    for (string s : rs) {
+//        std::cout << s << "\n";
+//    }
+//    vector<int> nums = {0,1,2,3,0,13};
+//    solution.moveZeroes(nums);
+    
+    vector<int> nums1 = {1,2,2,1};
+    vector<int> nums2 = {2,2};
+    solution.intersect(nums1, nums2);
     return 0;
 }

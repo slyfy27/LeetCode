@@ -7,6 +7,9 @@
 
 #include "aray_solution.hpp"
 #include <vector>
+#include <unordered_set>
+#include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -242,5 +245,144 @@ namespace Algorithm {
             }
             return primes.size();
         }
+        
+        // https://leetcode-cn.com/problems/contains-duplicate/
+        bool containsDuplicate(vector<int>& nums) {
+            sort(nums.begin(), nums.end());
+            bool rs = false;
+            for (int i = 1; i < nums.size(); i ++) {
+                if (nums[i] == nums[i-1]) {
+                    rs = true;
+                    break;
+                }
+            }
+            return rs;
+        }
+        
+        bool containsDuplicate2(vector<int>& nums) {
+            unordered_set<int> set;
+            for (int n : nums) {
+                if (set.find(n) != set.end()) {
+                    return true;
+                } else {
+                    set.insert(n);
+                }
+            }
+            return false;
+        }
+        
+        // https://leetcode-cn.com/problems/contains-duplicate-ii/
+        bool containsNearbyDuplicate(vector<int>& nums, int k) {
+            if (k == 0) {
+                return false;
+            }
+            unordered_set<int> set;
+            for (int i = 0; i < nums.size(); i ++) {
+                if (set.find(nums[i]) != set.end()) {
+                    return true;
+                } else {
+                    if (set.size() >= k) {
+                        set.erase(nums[i-k]);
+                    }
+                    set.insert(nums[i]);
+                }
+            }
+            return false;
+        }
+        
+        // https://leetcode-cn.com/problems/summary-ranges/
+        vector<string> summaryRanges(vector<int>& nums) {
+            int i = 0;
+            vector<string> rs;
+            while (i < nums.size()) {
+                int left = i;
+                i ++;
+                while (i < nums.size() && nums[i] == nums[i-1] + 1) {
+                    i ++;
+                }
+                int right = i - 1;
+                if (left < right) {
+                    string ls = to_string(nums[left]);
+                    ls += "->";
+                    ls += to_string(nums[right]);
+                    rs.push_back(ls);
+                } else {
+                    string ls = to_string(nums[left]);
+                    rs.push_back(ls);
+                }
+            }
+            return rs;
+        }
+        
+        // https://leetcode-cn.com/problems/missing-number/
+        int missingNumber(vector<int>& nums) {
+            int n = nums.size();
+            //等差数列求和
+            int sum = n * (n+1)/2;
+            for (int i: nums) {
+                sum -= i;
+            }
+            return sum;
+        }
+        
+        // https://leetcode-cn.com/problems/move-zeroes/
+        void moveZeroes(vector<int>& nums) {
+            for (int i = 0; i < nums.size(); i ++) {
+                if (nums[i] == 0) {
+                    for (int j = i + 1; j < nums.size(); j ++) {
+                        if (nums[j] != 0) {
+                            //swap
+                            int tmp = nums[j];
+                            nums[j] = nums[i];
+                            nums[i] = tmp;
+                            break;
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < nums.size(); i ++) {
+                std::cout << nums[i] << "\n" << endl;
+            }
+        }
+        
+        // https://leetcode-cn.com/problems/intersection-of-two-arrays/
+        vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+            unordered_set<int> set;
+            unordered_set<int> rset;
+            vector<int> rs;
+            for (int i: nums1) {
+                set.insert(i);
+            }
+            for (int i: nums2) {
+                if (rset.find(i) == set.end()) {
+                    if (set.find(i) != set.end()) {
+                        rs.push_back(i);
+                        rset.insert(i);
+                    }
+                }
+            }
+            return rs;
+        }
+        
+        // https://leetcode-cn.com/problems/intersection-of-two-arrays-ii/
+        vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+            sort(nums1.begin(), nums1.end());
+            sort(nums2.begin(), nums2.end());
+            int p1 = 0, p2 = 0;
+            vector<int> rs;
+            while (p1 < nums1.size() && p2 < nums2.size()) {
+                if (nums1[p1] == nums2[p2]) {
+                    rs.push_back(nums1[p1]);
+                    p1 ++;
+                    p2 ++;
+                } else if (nums1[p1] < nums2[p2]) {
+                    p1 ++;
+                } else {
+                    p2 ++;
+                }
+            }
+            return rs;
+        }
+        
     };
 }
