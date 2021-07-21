@@ -8,6 +8,7 @@
 #include "aray_solution.hpp"
 #include <vector>
 #include <unordered_set>
+#include <set>
 #include <string>
 #include <iostream>
 
@@ -379,6 +380,47 @@ namespace Algorithm {
                     p1 ++;
                 } else {
                     p2 ++;
+                }
+            }
+            return rs;
+        }
+        
+        // https://leetcode-cn.com/problems/third-maximum-number/
+        int thirdMax(vector<int>& nums) {
+            set<int> s(nums.begin(), nums.end());
+            int n = s.size();
+            if (n < 3) return *(s.rbegin());
+            set<int>::reverse_iterator iter = s.rbegin();
+            iter++;
+            iter++;
+            return *iter;
+        }
+        
+        // https://leetcode-cn.com/problems/find-all-numbers-disappeared-in-an-array/
+//        vector<int> findDisappearedNumbers(vector<int>& nums) {
+//            unordered_set<int> source;
+//            vector<int> rs;
+//            for (int i = 1; i <= nums.size() ; i ++) {
+//                source.insert(i);
+//            }
+//            for (int n: nums) {
+//                source.erase(n);
+//            }
+//            for (int n: source) {
+//                rs.push_back(n);
+//            }
+//            return rs;
+//        }
+        
+        vector<int> findDisappearedNumbers(vector<int>& nums) {
+            int size = nums.size();
+            vector<int> rs;
+            for (int n: nums) {
+                nums[n-1] += size;
+            }
+            for (int i = 0; i < size; i ++) {
+                if (nums[i] > size) {
+                    rs.push_back(i+1);
                 }
             }
             return rs;
