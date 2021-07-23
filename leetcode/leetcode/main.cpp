@@ -44,9 +44,10 @@ int main(int argc, const char * argv[]) {
 //    vector<int> nums = {0,1,2,3,0,13};
 //    solution.moveZeroes(nums);
     
-    vector<int> nums1 = {1,2,2,1};
-    vector<int> nums2 = {3,2,1};
-    solution.intersect(nums1, nums2);
-    solution.thirdMax(nums2);
+    vector<int> nums1 = {1,2,3,4};
+//    vector<int> nums2 = {3,2,1};
+//    solution.intersect(nums1, nums2);
+//    solution.thirdMax(nums2);
+    solution.minMoves(nums1);
     return 0;
 }

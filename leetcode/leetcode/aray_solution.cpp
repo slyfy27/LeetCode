@@ -11,6 +11,7 @@
 #include <set>
 #include <string>
 #include <iostream>
+#include <unordered_map>
 
 using namespace std;
 
@@ -425,6 +426,152 @@ namespace Algorithm {
             }
             return rs;
         }
+        
+        // https://leetcode-cn.com/problems/minimum-moves-to-equal-array-elements/
+        int minMoves(vector<int>& nums) {
+            int min = INT_MAX;
+            for (int n: nums) {
+                if (n < min) {
+                    min = n;
+                }
+            }
+            int rs = 0;
+            for (int n: nums) {
+                rs += n - min;
+            }
+            return rs;
+        }
+        
+        // https://leetcode-cn.com/problems/assign-cookies/
+        int findContentChildren(vector<int>& g, vector<int>& s) {
+            sort(g.begin(), g.end());
+            sort(s.begin(), s.end());
+            int gg = 0, ss = 0;
+            int rs = 0;
+            while (gg < g.size() && ss < s.size()) {
+                if (s[ss] >= g[gg]) {
+                    ss ++;
+                    gg ++;
+                    rs ++;
+                } else {
+                    ss ++;
+                }
+            }
+            return rs;
+        }
+        
+        // https://leetcode-cn.com/problems/island-perimeter/
+        int islandPerimeter(vector<vector<int>>& grid) {
+            int rs = 0;
+            for (int i = 0; i < grid.size(); i ++) {
+                for (int j = 0; j < grid[i].size(); j ++) {
+                    if (grid[i][j] == 1) {
+                        rs += 4;
+                        if (i > 0) {
+                            if (grid[i - 1][j] == 1) {
+                                rs -= 1;
+                            }
+                        }
+                        if (j > 0) {
+                            if (grid[i][j-1] == 1) {
+                                rs -= 1;
+                            }
+                        }
+                        if ((i + 1) < grid.size()) {
+                            if (grid[i + 1][j] == 1) {
+                                rs -= 1;
+                            }
+                        }
+                        if ((j + 1) < grid[i].size()) {
+                            if (grid[i][j+1] == 1) {
+                                rs -= 1;
+                            }
+                        }
+                    }
+                }
+            }
+            return rs;
+        }
+        
+        // https://leetcode-cn.com/problems/max-consecutive-ones/
+        int findMaxConsecutiveOnes(vector<int>& nums) {
+            int rs = 0;
+            int tmp = 0;
+            for (int i = 0; i < nums.size(); i ++) {
+                if (nums[i] == 0) {
+                    rs = max(rs,tmp);
+                    tmp = 0;
+                } else {
+                    tmp ++;
+                }
+            }
+            return rs;
+        }
+        
+        // https://leetcode-cn.com/problems/teemo-attacking/
+        int findPoisonedDuration(vector<int>& timeSeries, int duration) {
+            int rs = 0;
+            rs += duration;
+            for (int i = 1; i < timeSeries.size(); i ++) {
+                int sub = timeSeries[i] - timeSeries[i-1];
+                if (sub < duration) {
+                    rs += sub;
+                } else {
+                    rs += duration;
+                }
+            }
+            return rs;
+        }
+        
+        // https://leetcode-cn.com/problems/relative-ranks/
+        vector<string> findRelativeRanks(vector<int>& score) {
+            vector<int> source = score;
+            vector<string> rs;
+            unordered_map<int, string> map;
+            sort(score.begin(), score.end());
+            for (int i = 0; i <score.size(); i ++) {
+                switch (score.size() - i - 1) {
+                    case 0:
+                        map[score[i]] = "Gold Medal";
+                        break;
+                    case 1:
+                        map[score[i]] = "Silver Medal";
+                        break;
+                    case 2:
+                        map[score[i]] = "Bronze Medal";
+                        break;
+                    default:
+                        map[score[i]] = to_string(score.size() - i);
+                        break;
+                }
+            }
+            for (int i = 0; i < source.size(); i ++) {
+                rs.push_back(map[source[i]]);
+            }
+            return rs;
+        }
+        
+        // https://leetcode-cn.com/problems/longest-harmonious-subsequence/
+        //超时
+//        int findLHS(vector<int>& nums) {
+//            int rs = 0;
+//            for (int i = 0; i < nums.size(); i ++) {
+//                int length = 0;
+//                bool flag = false;
+//                for (int j = 0; j < nums.size(); j ++) {
+//                    if (nums[j] == nums[i]) {
+//                        length ++;
+//                    } else if (nums[j] + 1 == nums[i]) {
+//                        length ++;
+//                        flag = true;
+//                    }
+//                }
+//                if (flag) {
+//                    rs = max(rs,length);
+//                }
+//            }
+//            return rs;
+//        }
         
     };
 }
