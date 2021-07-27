@@ -573,5 +573,212 @@ namespace Algorithm {
 //            return rs;
 //        }
         
+        // https://leetcode-cn.com/problems/minimum-index-sum-of-two-lists/
+//        vector<string> findRestaurant(vector<string>& list1, vector<string>& list2) {
+//            vector<string> rs;
+//            int min = INT_MAX;
+//            for (int i = 0 ; i < list1.size(); i ++) {
+//                for (int j = 0; j < list2.size(); j ++) {
+//                    if (list1[i] == list2[j]) {
+//                        if (min > i + j) {
+//                            min = i + j;
+//                            rs.clear();
+//                        } else if (min < i + j) {
+//                            break;
+//                        }
+//                        rs.push_back(list2[j]);
+//                        break;
+//                    }
+//                }
+//            }
+//            return rs;
+//        }
+        
+        vector<string> findRestaurant(vector<string>& list1, vector<string>& list2) {
+            vector<string> rs;
+            unordered_map<string, int> map1;
+            int min = INT_MAX;
+            for (int i = 0 ; i < list1.size(); i ++) {
+                map1[list1[i]] = i;
+            }
+            for (int j = 0; j < list2.size(); j ++) {
+                if (map1.find(list2[j]) != map1.end()) {
+                    if (min < map1[list2[j]] + j) {
+                        break;
+                    } else if (min > map1[list2[j]] + j) {
+                        min = map1[list2[j]] + j;
+                        rs.clear();
+                    }
+                    rs.push_back(list2[j]);
+                }
+            }
+            return rs;
+        }
+        
+        // https://leetcode-cn.com/problems/can-place-flowers/
+        bool canPlaceFlowers(vector<int>& flowerbed, int n) {
+            int count = 0;
+            int m = flowerbed.size();
+            int prev = -1;
+            for (int i = 0; i < m; i++) {
+                if (flowerbed[i] == 1) {
+                    if (prev < 0) {
+                        count += i / 2;
+                    } else {
+                        count += (i - prev - 2) / 2;
+                    }
+                    if (count >= n) {
+                        return true;
+                    }
+                    prev = i;
+                }
+            }
+            if (prev < 0) {
+                count += (m + 1) / 2;
+            } else {
+                count += (m - prev - 1) / 2;
+            }
+            return count >= n;
+        }
+        
+        // https://leetcode-cn.com/problems/maximum-product-of-three-numbers/
+        int maximumProduct(vector<int>& nums) {
+            sort(nums.begin(), nums.end());
+            int n = nums.size();
+            return max(nums[0] * nums[1] * nums[n-1], nums[n-1] * nums[n-2] * nums[n-3]);
+        }
+        
+        // https://leetcode-cn.com/problems/maximum-average-subarray-i/
+        double findMaxAverage(vector<int>& nums, int k) {
+            int rs = 0;
+            for (int i = 0; i < k; i ++) {
+                rs += nums[i];
+            }
+            int cur = rs;
+            for (int i = k; i < nums.size(); i ++) {
+                int tmp = cur - nums[i-k] + nums[i];
+                rs = max(rs, tmp);
+                cur = tmp;
+            }
+            return rs*1.0/k;
+        }
+        
+        // https://leetcode-cn.com/problems/set-mismatch/
+        vector<int> findErrorNums(vector<int>& nums) {
+            vector<int> rs;
+            unordered_set<int> set;
+            int n = nums.size();
+            //等差数列求和
+            int errorn;
+            int sum = n * (n+1)/2;
+            for (int num: nums) {
+                if (set.find(num) != set.end()) {
+                    errorn = num;
+                    rs.push_back(errorn);
+                } else {
+                    set.insert(num);
+                    sum -= num;
+                }
+            }
+            rs.push_back(sum);
+            return rs;
+        }
+        
+        // https://leetcode-cn.com/problems/image-smoother/
+        vector<vector<int>> imageSmoother(vector<vector<int>>& img) {
+            vector<vector<int>> option = {{-1,0},{-1,1},{-1,-1},{1,0},{1,1},{1,-1},{0,1},{0,-1}};
+            vector<vector<int>> rs(img.begin(),img.end());
+            for (int i = 0; i < img.size(); i ++) {
+                for (int j = 0; j < img[i].size(); j ++) {
+                    int tmp = img[i][j];
+                    int count = 1;
+                    for(vector<int> op: option) {
+                        int x = i + op[0];
+                        int y = j + op[1];
+                        if (x >= 0 && x < img.size() && y >= 0 && y < img[i].size()) {
+                            tmp += img[x][y];
+                            count ++;
+                        }
+                    }
+                    rs[i][j] = tmp/count;
+                }
+            }
+            return img;
+        }
+        
+        // https://leetcode-cn.com/problems/longest-continuous-increasing-subsequence/
+        int findLengthOfLCIS(vector<int>& nums) {
+            int rs = 1;
+            int cur = 1;
+            for (int i = 1; i < nums.size(); i ++) {
+                if (nums[i-1] < nums[i]) {
+                    cur ++;
+                } else {
+                    rs = max(rs, cur);
+                    cur = 1;
+                }
+            }
+            return max(rs,cur);
+        }
+        
+        // https://leetcode-cn.com/problems/degree-of-an-array/
+        int findShortestSubArray(vector<int>& nums) {
+            unordered_map<int, vector<int>> rs;
+            for (int i = 0; i < nums.size(); i ++) {
+                if (rs.find(nums[i]) != rs.end()) {
+                    rs[nums[i]].push_back(i);
+                } else {
+                    vector<int> tmp;
+                    tmp.push_back(i);
+                    rs[nums[i]] = tmp;
+                }
+            }
+            int m = 1;
+            int r = INT_MAX;
+            for (auto it = rs.begin(); it != rs.end(); it ++) {
+                vector<int> tmp = it->second;
+                if (tmp.size() > m) {
+                    r = tmp[tmp.size()-1] - tmp[0] + 1;
+                    m = tmp.size();
+                } else if (tmp.size() == m) {
+                    r = min(tmp[tmp.size()-1] - tmp[0] + 1, r);
+                }
+            }
+            return r + 1;
+        }
+        
+        // https://leetcode-cn.com/problems/1-bit-and-2-bit-characters/
+        bool isOneBitCharacter(vector<int>& bits) {
+            int n = bits.size();
+            int idx = 0;
+            while (idx < n - 1) {
+                idx += bits[idx] + 1;
+            }
+            return idx == n-1;
+        }
+        
+        // https://leetcode-cn.com/problems/longest-word-in-dictionary/
+        
+        //前缀数
+        class TrieNode {
+            string word;
+            /// 26个字母
+            TrieNode *children[26];
+            bool end;
+            
+            TrieNode(){
+                word = "";
+                end = false;
+                memset(children, sizeof(TrieNode *), 26);
+            }
+        };
+        
+        class TrieTree {
+            
+        };
+        
+//        string longestWord(vector<string>& words) {
+//            
+//        }
     };
 }
