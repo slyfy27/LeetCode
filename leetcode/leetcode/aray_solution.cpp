@@ -12,6 +12,7 @@
 #include <string>
 #include <iostream>
 #include <unordered_map>
+#include <queue>
 
 using namespace std;
 
@@ -780,5 +781,45 @@ namespace Algorithm {
 //        string longestWord(vector<string>& words) {
 //            
 //        }
+        
+        // https://leetcode-cn.com/problems/range-addition-ii/
+        int maxCount(int m, int n, vector<vector<int>>& ops) {
+            int x = m, y = n;
+            if (ops.size() == 0) {
+                return x * y;
+            }
+            for(auto v: ops) {
+                x = min(v[0]-1,x);
+                y = min(v[1]-1,y);
+                x = max(x, 0);
+                y = max(y, 0);
+            }
+            return (x+1)*(y+1);
+        }
+        
+        // https://leetcode-cn.com/problems/flood-fill/
+        
+        vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
+            const int dx[4] = {1, 0, 0, -1};
+            const int dy[4] = {0, 1, -1, 0};
+            int currColor = image[sr][sc];
+            if (currColor == newColor) return image;
+            int n = image.size(), m = image[0].size();
+            queue<pair<int, int>> que;
+            que.emplace(sr, sc);
+            image[sr][sc] = newColor;
+            while (!que.empty()) {
+                int x = que.front().first, y = que.front().second;
+                que.pop();
+                for (int i = 0; i < 4; i++) {
+                    int mx = x + dx[i], my = y + dy[i];
+                    if (mx >= 0 && mx < n && my >= 0 && my < m && image[mx][my] == currColor) {
+                        que.emplace(mx, my);
+                        image[mx][my] = newColor;
+                    }
+                }
+            }
+            return image;
+        }
     };
 }
